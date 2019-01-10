@@ -1,6 +1,7 @@
 <?php namespace Backend\Models;
 
 use App;
+use Backend;
 use Url;
 use File;
 use Lang;
@@ -157,7 +158,13 @@ class BrandSetting extends Model
 
     public static function getDefaultFavicon()
     {
-        return \Backend::skinAsset('assets/images/favicon.png');
+        $faviconPath = File::symbolizePath(Config::get('brand.faviconPath'));
+
+        if ($faviconPath && File::exists($faviconPath)) {
+            return Url::asset(File::localToPublic($faviconPath));
+        }
+
+        return Backend::skinAsset('assets/images/favicon.png');
     }
 
     public static function getDefaultLogo()
